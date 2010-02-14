@@ -32,12 +32,17 @@ glype proxies on the net.
 
 Patches happily accepted, please open a github ticket and attach the patch.
 
-  * specs need to be implemented
-  * POST doesn't work
-  * Cookies don't work
-  * SSL doesn't work
-  * Implement other sources
+* Specs need to be implemented
+* Add inline docs
+* Store proxies across runs, so that the list can grow larger than the status list
+* Optionally, store proxy verification across runs
+* Undo link encoding if a Glype adds it
+* Strip annoying stuff that Glype adds as a footer and header
+* POST doesn't work
+* Cookies don't work
+* SSL doesn't work
+* Implement other proxy sources
 
 == Limitations
 
-  * PUT and DELETE can't work do to the way Glype is implemented
+* PUT and DELETE can't work do to the way Glype is implemented
