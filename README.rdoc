@@ -1,0 +1,43 @@
+= Strawman
+
+A ruby gem which allows you to proxy EventMachine HTTP GET requests through
+glype proxies on the net.
+
+== Getting started
+
+  # make sure you have gemcutter.org repos enabled
+  gem install strawman
+
+== A simple example
+
+  require 'rubygems'
+  require 'eventmachine'
+  require 'em-http'
+  $LOAD_PATH << "../lib/"
+  require 'strawman'
+  
+  EventMachine.run {
+    proxy_list = Strawman::ProxyList.new
+    sources_set = proxy_list.set_sources([Strawman::TwitterSource.new("proxy_sites")])
+    sources_set.callback{
+      http = Strawman::HttpRequest.new(proxy_list, 'http://goingtorain.com/').get
+      http.callback {
+        p http.response
+        EventMachine.stop
+      }
+    }
+  }
+
+== TODO
+
+Patches happily accepted, please open a github ticket and attach the patch.
+
+  * specs need to be implemented
+  * POST doesn't work
+  * Cookies don't work
+  * SSL doesn't work
+  * Implement other sources
+
+== Limitations
+
+  * PUT and DELETE can't work do to the way Glype is implemented
