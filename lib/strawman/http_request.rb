@@ -9,8 +9,8 @@ module Strawman
     def get
       http = @request.get :head => {"referer" => @proxy.referer}
       http.callback {
-        # TODO: Munge the return output
-        puts http.response_header.inspect
+        # TODO: Munge the return output so that the stuff added by Glype is
+        # removed
       }
       http
     end

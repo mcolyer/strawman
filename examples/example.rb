@@ -10,6 +10,7 @@ EventMachine.run {
   sources_set.callback{
     http = Strawman::HttpRequest.new(proxy_list, 'http://goingtorain.com/').get
     http.callback {
+      p http.response_header.inspect
       p http.response
       EventMachine.stop
     }

@@ -23,7 +23,6 @@ module Strawman
       proxies_ready.callback do
         sources.each do |source|
           source.proxies.each do |proxy|
-            puts "#{proxy} #{proxy.valid?}"
             @proxies << proxy if proxy.valid?
           end
         end
