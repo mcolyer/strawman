@@ -14,12 +14,15 @@ module Strawman
       fetched.callback do
         @proxies = JSON.parse(read_cache).map do |status|
           match = /.*(http:\/\/.*)/.match(status["text"])
+
           if match
             GlypeProxy.new(match[1])
           else
             nil
           end
         end.compact
+
+        # Notify that the source is now initialized
         set_deferred_status :succeeded
       end
     end

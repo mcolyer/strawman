@@ -7,12 +7,14 @@ module Strawman
 
     def set_sources(sources)
       sources_ready = EventMachine::MultiRequest.new
+      proxies_ready = EventMachine::MultiRequest.new
 
+      # Fetch all of the sources
       sources.each do |source|
         sources_ready.add(source)
       end
 
-      proxies_ready = EventMachine::MultiRequest.new
+      # Verify all of the proxies
       sources_ready.callback do
         sources.each do |source|
           source.proxies.each do |proxy|
@@ -21,6 +23,7 @@ module Strawman
         end
       end
 
+      # Include proxies that are verified
       proxies_ready.callback do
         sources.each do |source|
           source.proxies.each do |proxy|

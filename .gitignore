@@ -2,3 +2,4 @@
 Manifest
 *.gemspec
 pkg/*
+examples/cache/*
