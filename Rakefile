@@ -9,5 +9,5 @@ Echoe.new('strawman', '0.1') do |p|
   p.email          = "matt @nospam@ colyer.name"
   p.ignore_pattern = []
   p.development_dependencies = ["rspec"]
-  p.dependencies = ["eventmachine", "em-http-request"]
+  p.dependencies = ["eventmachine", "em-http-request", "json"]
 end
