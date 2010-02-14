@@ -12,8 +12,8 @@ module Strawman
       @valid
     end
 
-    def validate
-      url = proxy_url("http://whatismyip.org")
+    def validate(verification_url)
+      url = proxy_url(verification_url)
       # FIXME: This only validate proxies that don't require a unique session
       # cookie which is retrieved by going to the root page and looking for the
       # s cookie.

@@ -1,7 +1,8 @@
 module Strawman
   class ProxyList
-    def initialize
+    def initialize(verification_url)
       @proxies = []
+      @verification_url = verification_url
     end
 
     def set_sources(sources)
@@ -15,7 +16,7 @@ module Strawman
       sources_ready.callback do
         sources.each do |source|
           source.proxies.each do |proxy|
-            proxies_ready.add(proxy.validate)
+            proxies_ready.add(proxy.validate(verification_url))
           end
         end
       end
