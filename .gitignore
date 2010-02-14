@@ -1,0 +1,4 @@
+*.swp
+Manifest
+*.gemspec
+pkg/*
