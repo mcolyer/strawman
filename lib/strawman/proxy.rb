@@ -42,10 +42,4 @@ module Strawman
       "/browse.php?u=#{encoded_url}&f=norefer"
     end
   end
-  
-  class PhpProxy < Proxy
-    def valid?
-      false
-    end
-  end
 end
