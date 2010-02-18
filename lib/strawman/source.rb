@@ -58,10 +58,10 @@ module Strawman
         fetch
       end
     end
-    
+
     def fetch
       http = EventMachine::HttpRequest.new(cache_file_url).get
-      
+
       http.callback do
         FileUtils.mkdir(cache_dir) unless File.exist? cache_dir
         open(cache_file_path, "w") do |f|

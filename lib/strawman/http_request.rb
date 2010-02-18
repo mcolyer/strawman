@@ -5,7 +5,7 @@ module Strawman
       proxied_url = @proxy.proxy_url(url)
       @request = EventMachine::HttpRequest.new(proxied_url)
     end
-    
+
     def get
       http = @request.get :head => {"referer" => @proxy.referer}
       http.callback {
