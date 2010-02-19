@@ -24,22 +24,25 @@ module Strawman
           data = fetched.response
         end
 
-        @proxies = JSON.parse(data).map do |status|
-          match = /.*(http:\/\/.*)/.match(status["text"])
+        @proxies = parse(data)
 
-          if match
-            GlypeProxy.new(match[1])
-          else
-            nil
-          end
-        end.compact
-
-        # Notify that the source is now initialized
         succeed
       end
     end
 
   private
+    def parse(data)
+      JSON.parse(data).map do |status|
+        match = /.*(http:\/\/.*)/.match(status["text"])
+
+        if match
+          GlypeProxy.new(match[1])
+        else
+          nil
+        end
+      end.compact
+    end
+
     def cache_dir
       "cache"
     end
