@@ -42,31 +42,27 @@ module Strawman
     # it. If it isn't valid it keeps trying all available proxies before
     # returning nil.
     #
-    def proxy
-      proxy = @proxies.choice
-      return nil unless proxy
+    def proxy(deferrable=nil)
+      deferrable ||= EventMachine::DefaultDeferrable.new
 
-      complete = false
-      proxy.valid = false
+      proxy = @proxies.choice
+      deferrable.fail unless proxy
 
       proxy_response = proxy.validate(@verification_url)
-      proxy_response.callback { complete = true }
+      proxy_response.callback do
+        if proxy.valid?
+          deferrable.succeed(proxy)
+        else
+          self.proxy(deferrable)
+        end
+      end
+
       proxy_response.errback do
         @proxies.remove(proxy)
         @dead_proxies.add(proxy)
-        complete = true
       end
 
-      while true
-        break if complete
-        sleep 0.1
-      end
-
-      if proxy.valid?
-        proxy
-      else
-        self.proxy
-      end
+      deferrable
     end
 
     #

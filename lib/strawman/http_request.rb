@@ -4,9 +4,15 @@ module Strawman
   # A simple wrapper for em-http-client's HttpRequest.
   #
   class HttpRequest
+    include EventMachine::Deferrable
+
     def initialize(proxy_list, url)
-      @proxy = proxy_list.proxy
-      @request = Transport.new(@proxy.proxy_url(url))
+      proxy_response = proxy_list.proxy
+      proxy_response.callback do |proxy|
+        @proxy = proxy
+        @request = Transport.new(@proxy.proxy_url(url))
+        succeed
+      end
     end
 
     #

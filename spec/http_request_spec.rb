@@ -14,8 +14,10 @@ describe Strawman::HttpRequest do
     @proxy = mock("Proxy")
     @proxy.should_receive(:referer).and_return(proxy_url)
     @proxy.should_receive(:proxy_url).and_return {|u| u}
+    deferrable = mock("Deferrable")
+    deferrable.should_receive(:callback).and_return{|b| b.call(@proxy)}
     @proxy_list = mock("ProxyList")
-    @proxy_list.should_receive(:proxy).and_return(@proxy)
+    @proxy_list.should_receive(:proxy).and_return(deferrable)
   end
 
   it "should support HTTP get" do

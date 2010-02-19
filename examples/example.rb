@@ -15,11 +15,17 @@ EventMachine.run {
 
   sources_set.callback{
     proxy_list.save("proxies")
-    http = Strawman::HttpRequest.new(proxy_list, 'http://goingtorain.com/').get
-    http.callback {
-      log.info http.response_header.inspect
-      log.info http.response
-      EventMachine.stop
+    request = Strawman::HttpRequest.new(proxy_list, 'http://goingtorain.com/')
+    request.callback {
+      http = request.get
+      http.callback {
+        log.info http.response_header.inspect
+        log.info http.response
+        EventMachine.stop
+      }
+    }
+    request.errback{
+      log.error "No available proxies"
     }
   }
 

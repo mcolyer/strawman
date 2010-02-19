@@ -42,8 +42,9 @@ describe Strawman::ProxyList do
         EventMachine::MockHttpRequest.register_file(proxy.proxy_url(@proxy_check_url), :get,
                                                     File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
         proxy = proxy_list.proxy
-
-        EventMachine::MockHttpRequest.count(proxy.proxy_url(@proxy_check_url), :get).should == 1
+        proxy.callback do |proxy|
+          EventMachine::MockHttpRequest.count(proxy.proxy_url(@proxy_check_url), :get).should == 1
+        end
         EventMachine.stop
       }
     }
