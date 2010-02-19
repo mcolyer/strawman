@@ -4,6 +4,14 @@ module Strawman
   # of proxy.
   #
   class Proxy
+    attr_reader :root_url
+    attr_writer :valid
+
+    def initialize(url)
+      @root_url = url
+      @valid = false
+    end
+
     #
     # Returns the the referer to use when making the proxied request.
     #
@@ -19,6 +27,18 @@ module Strawman
       "#{uri.scheme}://#{uri.host}:#{uri.port}#{uri.path}?#{uri.query}"
     end
 
+    #
+    # Used to determine whether this proxy is valid. This must be called from
+    # within the callback of the validate deferable.
+    #
+    def valid?
+      @valid
+    end
+
+    def ==(other)
+      self.class == other.class && self.root_url == other.root_url
+    end
+
   protected
     def proxy_path(url)
       raise NotImplementedError
@@ -30,11 +50,6 @@ module Strawman
   # See: http://www.glype.com/ for more details.
   #
   class GlypeProxy < Proxy
-    def initialize(url)
-      @root_url = url
-      @valid = false
-    end
-
     #
     # Verifies whether this proxy is currently functional. Returns a deferable.
     #
@@ -51,14 +66,6 @@ module Strawman
       }
 
       http
-    end
-
-    #
-    # Used to determine whether this proxy is valid. This must be called from
-    # within the callback of the validate deferable.
-    #
-    def valid?
-      @valid
     end
 
     def to_s

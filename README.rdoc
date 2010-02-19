@@ -33,8 +33,6 @@ RDoc: http://rdoc.info/projects/MattColyer/strawman
 
 Patches happily accepted, please open a github ticket and attach the patch.
 
-* Store proxies across runs, so that the list can grow larger than the status list
-* Optionally, store proxy verification across runs
 * Undo link encoding if Glype adds it
 * Strip annoying stuff that Glype adds as a footer and header
 * POST doesn't work
