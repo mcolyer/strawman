@@ -3,6 +3,8 @@
 A ruby gem which allows you to proxy EventMachine HTTP GET requests through
 glype proxies on the net.
 
+RDoc: http://rdoc.info/projects/MattColyer/strawman
+
 == Getting started
 
   # make sure you have gemcutter.org repos enabled
