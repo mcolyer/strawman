@@ -37,6 +37,7 @@ module Strawman
       URI.join @root_url, proxy_path(url)
     end
 
+protected
     def proxy_path(url)
       encoded_url = CGI.escape(Base64.encode64(url[4..-1]))
       "/browse.php?u=#{encoded_url}&f=norefer"
