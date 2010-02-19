@@ -31,7 +31,6 @@ glype proxies on the net.
 
 Patches happily accepted, please open a github ticket and attach the patch.
 
-* Specs need to be implemented
 * Add inline docs
 * Store proxies across runs, so that the list can grow larger than the status list
 * Optionally, store proxy verification across runs
