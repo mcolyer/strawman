@@ -1,12 +1,23 @@
 module Strawman
+  #
+  # Represents a group of proxy sources
+  #
   class ProxyList
     attr_reader :proxies
 
+    #
+    # [verification_url]  The url to use to verify that the proxy is valid. All
+    #                     it needs to do is return an HTTP status of 200.
+    #
     def initialize(verification_url)
       @proxies = []
       @verification_url = verification_url
     end
 
+    #
+    # Takes a list of sources and returns a deferrable which will complete once
+    # all sources have been fetched and all proxies have been verified.
+    #
     def set_sources(sources)
       sources_ready = EventMachine::MultiRequest.new
       proxies_ready = EventMachine::MultiRequest.new
@@ -37,6 +48,9 @@ module Strawman
       proxies_ready
     end
 
+    #
+    # Selects a random proxy from the list of available proxies
+    #
     def proxy
       @proxies.choice
     end

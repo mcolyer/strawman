@@ -14,7 +14,7 @@ glype proxies on the net.
   require 'eventmachine'
   require 'em-http'
   require 'strawman'
-  
+
   EventMachine.run {
     proxy_list = Strawman::ProxyList.new
     sources_set = proxy_list.set_sources([Strawman::TwitterSource.new("proxy_sites")])
@@ -31,7 +31,6 @@ glype proxies on the net.
 
 Patches happily accepted, please open a github ticket and attach the patch.
 
-* Add inline docs
 * Store proxies across runs, so that the list can grow larger than the status list
 * Optionally, store proxy verification across runs
 * Undo link encoding if Glype adds it

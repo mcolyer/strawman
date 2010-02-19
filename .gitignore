@@ -3,3 +3,4 @@ Manifest
 *.gemspec
 pkg/*
 examples/cache/*
+doc/*

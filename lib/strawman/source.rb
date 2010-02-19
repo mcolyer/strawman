@@ -2,11 +2,26 @@ module Strawman
   class Source
   end
 
+  #
+  # A source that parses a twitter feed for urls which points to proxies, like
+  # http://twitter.com/proxy_lists. The class is deferable itself and fires
+  # its callback once the feed has been fetched and parsed.
+  #
+  # By default it caches the feed to disk (cache/twitter-username.json), and
+  # fetches a new copy after that file is an hour old. To disable this, simply
+  # pass in false to the constructor.
+  #
   class TwitterSource < Source
     include EventMachine::Deferrable
     ONE_HOUR = 60*60
     attr_reader :proxies
 
+    #
+    # [twitter_username]  Just the twitter user's username. Not the full url.
+    #
+    # [cache]  Whether to enable or disable caching. Defaults to enabling
+    #          caching.
+    #
     def initialize(twitter_username, cache=true)
       @id = twitter_username
       @cache = cache
@@ -48,7 +63,7 @@ module Strawman
     end
 
     def cache_file_path
-      File.join cache_dir, "#{@id}.json"
+      File.join cache_dir, "twitter-#{@id}.json"
     end
 
     def cache_file_url
