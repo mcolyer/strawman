@@ -1,17 +1,15 @@
 require File.dirname(__FILE__) + '/helper'
 require 'strawman/http_request'
 require 'strawman/transport'
+require File.dirname(__FILE__) + '/mock_transport'
 
 describe Strawman::HttpRequest do
   before(:all) do
-    @url = "http://example.com"
-    proxy_url = "http://proxy.com"
+    @url = "http://example.com:80/"
+    proxy_url = "http://proxy.com/"
 
-    @em_callback = EventMachine::DefaultDeferrable.new
-    @em_callback.succeed
-    @em_request = mock("HttpRequest")
-    @em_request.should_receive(:get).with(:head => {"referer" => proxy_url}).and_return(@em_callback)
-    Strawman::Transport.should_receive(:new).with(@url).and_return(@em_request)
+    EventMachine::MockHttpRequest.register_file(@url, :get,
+                                                File.join(File.dirname(__FILE__), 'fixtures', 'twitter'))
 
     @proxy = mock("Proxy")
     @proxy.should_receive(:referer).and_return(proxy_url)
@@ -23,6 +21,6 @@ describe Strawman::HttpRequest do
   it "should support HTTP get" do
     http_request = Strawman::HttpRequest.new @proxy_list, @url
     http_response = http_request.get
-    http_response.should == @em_callback
+    EventMachine::MockHttpRequest.count(@url, :get).should == 1
   end
 end

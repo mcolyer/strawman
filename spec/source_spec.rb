@@ -11,8 +11,7 @@ describe Strawman::TwitterSource do
 
   it "should fetch the data from a twitter user and parse the results" do
     twitter_url = 'http://twitter.com:80/statuses/user_timeline/proxy_lists.json'
-    EventMachine::MockHttpRequest.register_file(twitter_url,
-                                                :get,
+    EventMachine::MockHttpRequest.register_file(twitter_url, :get,
                                                 File.join(File.dirname(__FILE__), 'fixtures', 'twitter'))
     EventMachine.run {
       source = Strawman::TwitterSource.new("proxy_lists", false)

@@ -15,7 +15,8 @@ module Strawman
     # Returns the url to fetch the given url through this proxy.
     #
     def proxy_url(url)
-      URI.join @root_url, proxy_path(url)
+      uri = URI.join @root_url, proxy_path(url)
+      "#{uri.scheme}://#{uri.host}:#{uri.port}#{uri.path}?#{uri.query}"
     end
 
   protected

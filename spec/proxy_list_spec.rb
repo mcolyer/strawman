@@ -12,15 +12,6 @@ describe Strawman::ProxyList do
     EventMachine::MockHttpRequest.register_file('http://twitter.com:80/statuses/user_timeline/proxy_lists.json',
                                                 :get,
                                                 File.join(File.dirname(__FILE__), 'fixtures', 'twitter'))
-    EventMachine::MockHttpRequest.register_file('http://surfproxy.org:80/browse.php?u=Oi8vd2hhdGlzbXlpcC5vcmc%3D%0A&f=norefer',
-                                                :get,
-                                                File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
-    EventMachine::MockHttpRequest.register_file('http://balikavadhuonline.com:80/browse.php?u=Oi8vd2hhdGlzbXlpcC5vcmc%3D%0A&f=norefer',
-                                                :get,
-                                                File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
-    EventMachine::MockHttpRequest.register_file('http://love2bunk.com:80/browse.php?u=Oi8vd2hhdGlzbXlpcC5vcmc%3D%0A&f=norefer',
-                                                :get,
-                                                File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
   end
 
   it "should verify sources with the given url and return a callback" do
@@ -29,6 +20,25 @@ describe Strawman::ProxyList do
       proxy_response = proxy_list.set_sources([Strawman::TwitterSource.new("proxy_lists", false)])
       proxy_response.callback {
         proxy_list.proxies.size.should == 3
+        EventMachine.stop
+      }
+    }
+  end
+
+  it "should verify sources as proxies are requested" do
+    EventMachine.run {
+      proxy_check_url = "http://whatismyip.org"
+      proxy_list = Strawman::ProxyList.new(proxy_check_url)
+      proxy_response = proxy_list.set_sources([Strawman::TwitterSource.new("proxy_lists", false)])
+      proxy_response.callback {
+        proxy = proxy_list.proxies.first
+        proxy_list.proxies = [proxy]
+
+        EventMachine::MockHttpRequest.register_file(proxy.proxy_url(proxy_check_url), :get,
+                                                    File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
+        proxy = proxy_list.proxy
+
+        EventMachine::MockHttpRequest.count(proxy.proxy_url(proxy_check_url), :get).should == 1
         EventMachine.stop
       }
     }

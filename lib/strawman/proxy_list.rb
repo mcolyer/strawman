@@ -3,7 +3,7 @@ module Strawman
   # Represents a group of proxy sources
   #
   class ProxyList
-    attr_reader :proxies
+    attr_accessor :proxies
 
     #
     # [verification_url]  The url to use to verify that the proxy is valid. All
@@ -11,48 +11,60 @@ module Strawman
     #
     def initialize(verification_url)
       @proxies = []
+      @dead_proxies = []
       @verification_url = verification_url
     end
 
     #
     # Takes a list of sources and returns a deferrable which will complete once
-    # all sources have been fetched and all proxies have been verified.
+    # all sources have been fetched.
     #
     def set_sources(sources)
       sources_ready = EventMachine::MultiRequest.new
-      proxies_ready = EventMachine::MultiRequest.new
 
-      # Fetch all of the sources
       sources.each do |source|
         sources_ready.add(source)
       end
 
-      # Verify all of the proxies
       sources_ready.callback do
         sources.each do |source|
           source.proxies.each do |proxy|
-            proxies_ready.add(proxy.validate(@verification_url))
+            @proxies << proxy
           end
         end
       end
 
-      # Include proxies that are verified
-      proxies_ready.callback do
-        sources.each do |source|
-          source.proxies.each do |proxy|
-            @proxies << proxy if proxy.valid?
-          end
-        end
-      end
-
-      proxies_ready
+      sources_ready
     end
 
     #
-    # Selects a random proxy from the list of available proxies
+    # Selects a random proxy from the list of available proxies and verifies
+    # it. If it isn't valid it keeps trying all available proxies before
+    # returning nil.
     #
     def proxy
-      @proxies.choice
+      proxy = @proxies.choice
+      return nil unless proxy
+
+      complete = false
+      proxy_response = proxy.validate(@verification_url)
+      proxy_response.callback { complete = true }
+      proxy_response.errback do
+        @proxies.remove(proxy)
+        @dead_proxies.add(proxy)
+        complete = true
+      end
+
+      while true
+        break if complete
+        sleep 0.1
+      end
+
+      if proxy.valid?
+        proxy
+      else
+        self.proxy
+      end
     end
   end
 end
