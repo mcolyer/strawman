@@ -1,5 +1,7 @@
 module Strawman
   class ProxyList
+    attr_reader :proxies
+
     def initialize(verification_url)
       @proxies = []
       @verification_url = verification_url
@@ -18,7 +20,7 @@ module Strawman
       sources_ready.callback do
         sources.each do |source|
           source.proxies.each do |proxy|
-            proxies_ready.add(proxy.validate(verification_url))
+            proxies_ready.add(proxy.validate(@verification_url))
           end
         end
       end
@@ -36,7 +38,7 @@ module Strawman
     end
 
     def proxy
-      @proxies.choice 
+      @proxies.choice
     end
   end
 end

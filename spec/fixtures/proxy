@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Date: Thu, 18 Feb 2010 17:03:03 GMT
+Server: Apache
+X-Powered-By: PHP/5.2.12
+Cache-Control: 
+Set-Cookie: s=baai6teku43gddhod5iegq62b0; path=/
+Last-Modified: Thu, 01 Jan 1970 00:00:00 GMT
+Vary: Accept-Encoding
+Content-Length: 14
+Content-Type: text/plain
+
+69.163.160.190

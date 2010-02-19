@@ -7,12 +7,24 @@ module Strawman
     ONE_HOUR = 60*60
     attr_reader :proxies
 
-    def initialize(twitter_username)
+    def initialize(twitter_username, cache=true)
       @id = twitter_username
+      @cache = cache
 
-      fetched = update_cache
+      if cache
+        fetched = update_cache
+      else
+        fetched = fetch
+      end
+
       fetched.callback do
-        @proxies = JSON.parse(read_cache).map do |status|
+        if @cache
+          data = read_cache
+        else
+          data = fetched.response
+        end
+
+        @proxies = JSON.parse(data).map do |status|
           match = /.*(http:\/\/.*)/.match(status["text"])
 
           if match
@@ -23,7 +35,7 @@ module Strawman
         end.compact
 
         # Notify that the source is now initialized
-        set_deferred_status :succeeded
+        succeed
       end
     end
 
@@ -60,12 +72,14 @@ module Strawman
     end
 
     def fetch
-      http = EventMachine::HttpRequest.new(cache_file_url).get
+      http = Transport.new(cache_file_url).get
 
-      http.callback do
-        FileUtils.mkdir(cache_dir) unless File.exist? cache_dir
-        open(cache_file_path, "w") do |f|
-          f.write(http.response)
+      if @cache
+        http.callback do
+          FileUtils.mkdir(cache_dir) unless File.exist? cache_dir
+          open(cache_file_path, "w") do |f|
+            f.write(http.response)
+          end
         end
       end
 

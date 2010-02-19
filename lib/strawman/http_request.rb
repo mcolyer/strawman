@@ -3,7 +3,7 @@ module Strawman
     def initialize(proxy_list, url)
       @proxy = proxy_list.proxy
       proxied_url = @proxy.proxy_url(url)
-      @request = EventMachine::HttpRequest.new(proxied_url)
+      @request = Transport.new(proxied_url)
     end
 
     def get

@@ -17,7 +17,7 @@ module Strawman
       # FIXME: This only validate proxies that don't require a unique session
       # cookie which is retrieved by going to the root page and looking for the
       # s cookie.
-      http = EventMachine::HttpRequest.new(url).get :head => {'referer' => @root_url}
+      http = Transport.new(url).get :head => {'referer' => @root_url}
       http.callback {
         @valid = true if http.response_header.status == 200
       }
