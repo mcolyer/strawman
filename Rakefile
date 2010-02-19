@@ -3,7 +3,7 @@ require 'spec/rake/spectask'
 require 'rake'
 require 'echoe'
 
-Echoe.new('strawman', '0.1') do |p|
+Echoe.new('strawman', '0.2') do |p|
   p.description    = "Allows you fetch pages using glype proxies."
   p.url            = "http://github.com/mattcolyer/strawman"
   p.author         = "Matt Colyer"
