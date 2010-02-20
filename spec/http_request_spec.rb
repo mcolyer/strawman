@@ -5,11 +5,8 @@ require File.dirname(__FILE__) + '/mock_transport'
 
 describe Strawman::HttpRequest do
   before(:all) do
-    @url = "http://example.com:80/"
+    @base_url = "http://example.com:80/"
     proxy_url = "http://proxy.com/"
-
-    EventMachine::MockHttpRequest.register_file(@url, :get,
-                                                File.join(File.dirname(__FILE__), 'fixtures', 'twitter'))
 
     @proxy = mock("Proxy")
     @proxy.should_receive(:referer).and_return(proxy_url)
@@ -20,9 +17,32 @@ describe Strawman::HttpRequest do
     @proxy_list.should_receive(:proxy).and_return(deferrable)
   end
 
-  it "should support HTTP get" do
-    http_request = Strawman::HttpRequest.new @proxy_list, @url
+  before(:each) do
+    EventMachine::MockHttpRequest.reset_registry!
+    EventMachine::MockHttpRequest.reset_counts!
+  end
+
+  it "should support HTTP GET" do
+    EventMachine::MockHttpRequest.register_file(@base_url, :get,
+                                                File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
+    http_request = Strawman::HttpRequest.new @proxy_list, @base_url
     http_response = http_request.get
-    EventMachine::MockHttpRequest.count(@url, :get).should == 1
+    EventMachine::MockHttpRequest.count(@base_url, :get).should == 1
+  end
+
+  it "should support HTTP POST" do
+    EventMachine::MockHttpRequest.register_file(@base_url, :post,
+                                                File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
+    http_request = Strawman::HttpRequest.new @proxy_list, @base_url
+    http_response = http_request.post
+    EventMachine::MockHttpRequest.count(@base_url, :post).should == 1
+  end
+
+  it "should support HTTP POST with parameters" do
+    EventMachine::MockHttpRequest.register_file(@base_url, :post,
+                                                File.join(File.dirname(__FILE__), 'fixtures', 'proxy'))
+    http_request = Strawman::HttpRequest.new @proxy_list, @base_url
+    http_response = http_request.post :body => {:test => 1}
+    EventMachine::MockHttpRequest.count(@base_url, :post).should == 1
   end
 end

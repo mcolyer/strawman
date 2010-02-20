@@ -16,23 +16,36 @@ module Strawman
     end
 
     #
-    # Handles get requests. Currently it accepts no arguments (ie query
-    # parameters, http headers etc...).
+    # Handles HTTP GET requests. Query parameters should be specified on the
+    # url given to HttpRequest.
     #
-    def get
-      http = @request.get :head => {"referer" => @proxy.referer}
-      http.callback {
-        # TODO: Munge the return output so that the stuff added by Glype is
-        # removed
-      }
+    # - opts: Takes a hash of options identical to EventMachine::HttpRequest.
+    #
+    # NOTE: most options will be ignored, except body data and proxy
+    # information.
+    #
+    def get(opts={})
+      opts = merge_referer_into_opts(opts)
+      http = @request.get
+      http.callback { munge_output }
       http
     end
 
     #
-    # TODO: Implement this.
+    # Handles HTTP POST requests. In for the post request to be a sent as a POST
+    # request, atleast one POST field must be specified in the opts. Query
+    # parameters should be specified on the url given to HttpRequest.
     #
-    def post
-      raise NotImplementedError
+    # - opts: Takes a hash of options identical to EventMachine::HttpRequest.
+    #
+    # NOTE: most options will be ignored, except body data and proxy
+    # information.
+    #
+    def post(opts={})
+      opts = merge_referer_into_opts(opts)
+      http = @request.post opts
+      http.callback { munge_output }
+      http
     end
 
     #
@@ -54,6 +67,18 @@ module Strawman
     #
     def head
       raise NotImplementedError
+    end
+
+  private
+    def merge_referer_into_opts(opts)
+      if opts.has_key? :head
+        opts[:head].merge({"referer" => @proxy.referer})
+      else
+        opts.merge({:head => {"referer" => @proxy.referer}})
+      end
+    end
+
+    def munge_output()
     end
   end
 end

@@ -54,11 +54,12 @@ Patches happily accepted, please open a github ticket and attach the patch.
 
 * Undo link encoding if Glype adds it
 * Strip annoying stuff that Glype adds as a footer and header
-* POST doesn't work
 * Cookies don't work
-* SSL doesn't work
 * Implement other proxy sources
 
 == Limitations
 
-* PUT and DELETE can't work do to the way Glype is implemented
+* SSL is not reliable. Some proxies throw up a warning while others let it
+  through. Also it's not secure, by it's very nature this library is introducing
+  a MITM.  Don't use it for sensitive things.
+* PUT and DELETE can't work do to the way Glype is implemented.
