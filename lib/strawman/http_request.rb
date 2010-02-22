@@ -26,7 +26,7 @@ module Strawman
     #
     def get(opts={})
       opts = merge_referer_into_opts(opts)
-      http = @request.get
+      http = @request.get opts
       http.callback { munge_output }
       http
     end
@@ -72,7 +72,8 @@ module Strawman
   private
     def merge_referer_into_opts(opts)
       if opts.has_key? :head
-        opts[:head].merge({"referer" => @proxy.referer})
+        opts[:head].merge!({"referer" => @proxy.referer})
+        opts
       else
         opts.merge({:head => {"referer" => @proxy.referer}})
       end

@@ -54,11 +54,19 @@ Patches happily accepted, please open a github ticket and attach the patch.
 
 * Undo link encoding if Glype adds it
 * Strip annoying stuff that Glype adds as a footer and header
-* Cookies don't work
 * Implement other proxy sources
 
 == Limitations
 
+* Cookies from the proxied page are returned like this:
+  c[DOMAIN][PATH][NAME]=VALUE; path=/"*
+  Note the letter c is configurable on the Glype proxy so it might not always b
+  this.
+* Cookies are sent like this:
+  :head => {:cookie => {"c[DOMAIN][PATH][NAME]" => VALUE}}
+  Again note that the letter c is configurable on the Glype proxy.
+* Cookies are currently not reliable as they can be enabled or disabled by each 
+  Glype install (the default is to enable though).
 * SSL is not reliable. Some proxies throw up a warning while others let it
   through. Also it's not secure, by it's very nature this library is introducing
   a MITM.  Don't use it for sensitive things.
