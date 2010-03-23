@@ -7,30 +7,38 @@
 
 	<title>Strawman</title>
 	
-	<style type="text/css">
-		body {
-  		margin-top: 1.0em;
-  		background-color: #b2e412;
-		  font-family: "Helvetica,Arial,FreeSans"; 
-  		color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-		h1 { font-size: 3.8em; color: #4d1bed; margin-bottom: 3px; }
-		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #4d1bed; }
-    h3 { text-align: center; color: #4d1bed; }
-    a { color: #4d1bed; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-	</style>
-	
+	    <style>
+      h1 {
+        background: url(logo.png) 50% 50% no-repeat;
+        height: 129px;
+        margin: 0;
+        text-indent: 9999px;
+        overflow: hidden;
+      }
+      
+      h2 {
+        text-align: center;    
+        margin-bottom: 30px;
+        font-family: "Georgia", "Times New Roman", serif;
+      }
+    
+      body {
+        font: 13.34px Helvetica, Arial, sans-serif;
+      }
+      
+      code {
+        font-size: 16px;
+      }
+      
+      #container {
+        line-height: 1.5em;
+        font-size: 110%;
+        text-align: justify;
+        width: 40em;
+        margin: 20px auto;
+      }
+      
+</style>
 </head>
 
 <body>
@@ -38,31 +46,23 @@
   
   <div id="container">
 
-    <div class="download">
-      <a href="http://github.com/MattColyer/strawman/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/MattColyer/strawman/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
-      
-    <h1><a href="http://github.com/MattColyer/strawman">strawman</a> 
-      <span class="small">by <a href="http://github.com/MattColyer">MattColyer</a></span></h1>
+    <h2>strawman</h2>
 
     <div class="description">
       A ruby gem which allows you to proxy EventMachine HTTP GET requests through glype proxies on the net.
     </div>
 
-    <h2>Dependencies</h2>
+    <h3>Dependencies</h3>
 <p>eventmachine, em-http-request, json</p>
-<h2>Install</h2>
+<h3>Install</h3>
 <p>gem install strawman</p>
-<h2>License</h2>
+<h3>License</h3>
 <p>MIT</p>
-<h2>Authors</h2>
+<h3>Authors</h3>
 <p>Matt Colyer<br/><br/>      </p>
 
 
-    <h2>Download</h2>
+    <h3>Download</h3>
     <p>
       You can download this project in either
       <a href="http://github.com/MattColyer/strawman/zipball/master">zip</a> or
