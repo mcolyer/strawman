@@ -10,6 +10,7 @@ module Strawman
     def initialize(url)
       @root_url = url
       @valid = false
+      @validate_response = ""
     end
 
     #
@@ -33,6 +34,13 @@ module Strawman
     #
     def valid?
       @valid
+    end
+
+    #
+    # Returns the response of the validate request from the proxy.
+    #
+    def validate_response
+      @validate_response
     end
 
     def ==(other)
@@ -62,6 +70,7 @@ module Strawman
       url = proxy_url(verification_url)
       http = Transport.new(url).get :head => {'referer' => @root_url}
       http.callback {
+        @validate_response = http.response
         @valid = true if http.response_header.status == 200
       }
 

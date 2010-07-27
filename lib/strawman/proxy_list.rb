@@ -58,8 +58,8 @@ module Strawman
       end
 
       proxy_response.errback do
-        @proxies.remove(proxy)
-        @dead_proxies.add(proxy)
+        @proxies.delete(proxy)
+        @dead_proxies.push(proxy)
       end
 
       deferrable
